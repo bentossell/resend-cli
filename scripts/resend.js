@@ -217,6 +217,113 @@ async function main() {
       break
     }
 
+    case 'templates':
+      switch (sub) {
+        case 'list': {
+          const params = new URLSearchParams()
+          if (args.limit) params.set('limit', args.limit)
+          if (args.after) params.set('after', args.after)
+          if (args.before) params.set('before', args.before)
+          result = await api('GET', `/templates?${params}`)
+          break
+        }
+        case 'get':
+          result = await api('GET', `/templates/${rest[0]}`)
+          break
+        case 'create': {
+          const body = { name: args.name, html: args.html }
+          if (args.alias) body.alias = args.alias
+          if (args.from) body.from = args.from
+          if (args.subject) body.subject = args.subject
+          if (args['reply-to']) body.reply_to = args['reply-to']
+          if (args.text) body.text = args.text
+          if (args.variables) body.variables = JSON.parse(args.variables)
+          result = await api('POST', '/templates', body)
+          break
+        }
+        case 'update': {
+          const body = {}
+          if (args.name) body.name = args.name
+          if (args.html) body.html = args.html
+          if (args.alias) body.alias = args.alias
+          if (args.from) body.from = args.from
+          if (args.subject) body.subject = args.subject
+          if (args['reply-to']) body.reply_to = args['reply-to']
+          if (args.text) body.text = args.text
+          if (args.variables) body.variables = JSON.parse(args.variables)
+          result = await api('PATCH', `/templates/${rest[0]}`, body)
+          break
+        }
+        case 'delete':
+          result = await api('DELETE', `/templates/${rest[0]}`)
+          break
+        case 'publish':
+          result = await api('POST', `/templates/${rest[0]}/publish`)
+          break
+        case 'duplicate':
+          result = await api('POST', `/templates/${rest[0]}/duplicate`)
+          break
+        default:
+          result = { error: 'Unknown templates subcommand. Use: list, get, create, update, delete, publish, duplicate' }
+      }
+      break
+
+    case 'broadcasts':
+      switch (sub) {
+        case 'list': {
+          const params = new URLSearchParams()
+          if (args.limit) params.set('limit', args.limit)
+          result = await api('GET', `/broadcasts?${params}`)
+          break
+        }
+        case 'get':
+          result = await api('GET', `/broadcasts/${rest[0]}`)
+          break
+        case 'create': {
+          const body = { segment_id: args['segment-id'], from: args.from, subject: args.subject }
+          if (args.html) body.html = args.html
+          if (args.text) body.text = args.text
+          if (args['reply-to']) body.reply_to = args['reply-to']
+          if (args.name) body.name = args.name
+          result = await api('POST', '/broadcasts', body)
+          break
+        }
+        case 'send': {
+          const body = {}
+          if (args['scheduled-at']) body.scheduled_at = args['scheduled-at']
+          result = await api('POST', `/broadcasts/${rest[0]}/send`, body)
+          break
+        }
+        case 'delete':
+          result = await api('DELETE', `/broadcasts/${rest[0]}`)
+          break
+        default:
+          result = { error: 'Unknown broadcasts subcommand. Use: list, get, create, send, delete' }
+      }
+      break
+
+    case 'segments':
+      switch (sub) {
+        case 'list': {
+          const params = new URLSearchParams()
+          if (args.limit) params.set('limit', args.limit)
+          result = await api('GET', `/segments?${params}`)
+          break
+        }
+        case 'get':
+          result = await api('GET', `/segments/${rest[0]}`)
+          break
+        case 'create':
+          result = await api('POST', '/segments', { name: args.name })
+          break
+        case 'delete':
+          result = await api('DELETE', `/segments/${rest[0]}`)
+          break
+        default:
+          result = { error: 'Unknown segments subcommand. Use: list, get, create, delete' }
+      }
+      break
+
     default:
       result = {
         error: 'Unknown command',
@@ -229,6 +336,9 @@ async function main() {
           contacts: 'contacts <audience_id> [list|get|create|update|delete] [contact_id] [--email <email>]',
           webhooks: 'webhooks [list|get|create|delete] [id] [--endpoint <url>]',
           batch: 'batch --emails <json_array>',
+          templates: 'templates [list|get|create|update|delete|publish|duplicate] [id] [--name <name>] [--html <html>] [--variables <json>]',
+          broadcasts: 'broadcasts [list|get|create|send|delete] [id] [--segment-id <id>] [--from <email>] [--subject <subject>]',
+          segments: 'segments [list|get|create|delete] [id] [--name <name>]',
         }
       }
   }
