@@ -2,10 +2,16 @@
 
 CLI for Resend email API. Send emails, manage domains, API keys, audiences, contacts, webhooks, templates, broadcasts, and segments.
 
-## Install
+## Run
 
 ```bash
-npm i -g @bentossell/resend-cli
+./scripts/resend.js <command>
+```
+
+Optional global command (no npm publish needed):
+
+```bash
+ln -sf ~/tools/resend/scripts/resend.js ~/.local/bin/resend
 ```
 
 Then use `resend ...`.
