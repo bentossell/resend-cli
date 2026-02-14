@@ -1,0 +1,30 @@
+{
+  "name": "@bentossell/resend-cli",
+  "version": "0.1.0",
+  "description": "CLI for Resend email API",
+  "license": "MIT",
+  "type": "commonjs",
+  "bin": {
+    "resend": "scripts/resend.js"
+  },
+  "files": [
+    "scripts/resend.js",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "resend",
+    "email",
+    "cli"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bentossell/resend-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bentossell/resend-cli/issues"
+  },
+  "homepage": "https://github.com/bentossell/resend-cli#readme"
+}
